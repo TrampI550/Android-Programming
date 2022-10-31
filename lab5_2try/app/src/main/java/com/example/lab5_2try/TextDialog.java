@@ -3,9 +3,12 @@ package com.example.lab5_2try;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.AlertDialog;
+import android.app.Notification;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,10 +17,17 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class TextDialog extends AppCompatActivity {
-    final Context context = this;
+public class TextDialog extends AppCompatActivity{
+    private int score = 0;
+    final Context context1 = this;
+    public final String ACTION_PLUS = "action_plus";
+    public final String ACTION_MINUS = "action_minus";
+    public final String SCORE = "score";
+    public final String BROADCAST_ACTION = "com.example.lab5_2tryservicebackbroadcast";
+//    public final String ACTION_MINUS = "action_minus";
     private Button button, next_btn;
     private TextView final_text;
+    BroadcastReceiver br;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,7 +36,48 @@ public class TextDialog extends AppCompatActivity {
         button = findViewById(R.id.prompt_button);
         next_btn = findViewById(R.id.next_btn3);
         final_text = (TextView) findViewById(R.id.final_text);
+
+        IntentFilter filt = new IntentFilter(BROADCAST_ACTION);
+        registerReceiver(br, filt);
+
+        BroadcastReceiver br = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                int op1 = intent.getIntExtra(ACTION_PLUS, 0);
+                int op2 = intent.getIntExtra(ACTION_PLUS, 0);
+                switch (op1) {
+                    case 0:
+                        if (score > 0) {
+                            score--;
+                        }
+                        break;
+                    case 1:
+                        if (score < 100) {
+                            score++;
+                        }
+                        break;
+                }
+                //stopService(new Intent(context1, NotificationService.class));
+                startService(new Intent(context1, NotificationService.class).putExtra(SCORE, score));
+            }
+        };
+
         setListenerOnButton();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        stopService(new Intent(context1, NotificationService.class));
+        unregisterReceiver(br);
+    }
+
+    public void onClickStart(View v) {
+        startService(new Intent(this, NotificationService.class));
+    }
+
+    public void onClickStop(View v) {
+        stopService(new Intent(this, NotificationService.class));
     }
 
     public void setListenerOnButton() {
@@ -40,9 +91,9 @@ public class TextDialog extends AppCompatActivity {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                LayoutInflater li = LayoutInflater.from(context);
+                LayoutInflater li = LayoutInflater.from(context1);
                 View promptsView = li.inflate(R.layout.prompt, null);
-                AlertDialog.Builder mDialogBuilder = new AlertDialog.Builder(context);
+                AlertDialog.Builder mDialogBuilder = new AlertDialog.Builder(context1);
                 mDialogBuilder.setView(promptsView);
                 final EditText userInput = (EditText) promptsView.findViewById(R.id.input_text);
                 mDialogBuilder

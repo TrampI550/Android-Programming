@@ -39,10 +39,10 @@
 
     <TextView
         android:id="@+id/textView"
-        android:layout_width="87dp"
+        android:layout_width="67dp"
         android:layout_height="36dp"
         android:layout_marginTop="16dp"
-        android:layout_marginEnd="260dp"
+        android:layout_marginEnd="280dp"
         android:text="Tasks"
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -50,11 +50,22 @@
 
     <Button
         android:id="@+id/create_task"
-        android:layout_width="90dp"
-        android:layout_height="36dp"
-        android:layout_marginStart="112dp"
+        android:layout_width="70dp"
+        android:layout_height="45dp"
+        android:layout_marginStart="88dp"
         android:layout_marginTop="16dp"
         android:text="Add task"
+        android:textSize="10sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/create_task3"
+        android:layout_width="70dp"
+        android:layout_height="45dp"
+        android:layout_marginStart="164dp"
+        android:layout_marginTop="16dp"
+        android:text="inspiration"
         android:textSize="10sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
